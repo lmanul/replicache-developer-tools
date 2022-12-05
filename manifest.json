@@ -8,7 +8,5 @@
     "128": "icons/128.png",
     "512": "icons/512.png"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
+  "devtools_page": "devtools.html"
 }
