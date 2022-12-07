@@ -2,20 +2,8 @@ console.log('panel JS');
 
 const CONTENT_SCRIPT_ID = 'replicache_devtools_hook';
 
-const getCurrentTab = async () => {
-  let queryOptions = { active: true, currentWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
-};
-
 const initialize = async () => {
   console.log('Initializing...');
-  const currentTab = await getCurrentTab();
-  if (!currentTab) {
-    return;
-  }
-
-  console.log('Registering content scripts...');
   const registered = await chrome.scripting.getRegisteredContentScripts({
     ids: [CONTENT_SCRIPT_ID],
   });
