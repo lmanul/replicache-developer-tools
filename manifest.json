@@ -8,5 +8,11 @@
     "128": "icons/128.png",
     "512": "icons/512.png"
   },
-  "devtools_page": "devtools.html"
+  "devtools_page": "devtools.html",
+  "permissions": [
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
 }
