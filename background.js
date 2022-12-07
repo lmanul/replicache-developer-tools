@@ -1,16 +1,36 @@
 const CONTENT_SCRIPT_ID = 'replicache_devtools_hook';
 
+async function getCurrentTab() {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
+}
+
 chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete' && tab.active) {
     console.log('Tab updated');
   }
 })
 
-console.log('Add listener, this is toplevel');
 chrome.runtime.onConnect.addListener(port => {
-  console.log('Add listener on runtime');
-  port.onMessage.addListener(msg => {
+  port.onMessage.addListener(async (msg) => {
     console.log('Got message', msg);
+    if (msg.event === 'sync-request') {
+      const tab = await getCurrentTab();
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        func: () => {
+          console.log('Executing script');
+          return 1;
+        }
+      }, (scriptResult) => {
+        console.log('Got result from script: ', scriptResult);
+        port.postMessage({
+          'event': 'sync-response',
+          'data':  scriptResult[0].result
+        });
+      });
+    }
   });
 });
 
