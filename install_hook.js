@@ -1,6 +1,20 @@
-console.log('Installing hook');
-// Looks like the Replicache object isn't quite ready yet when this
-// runs. Just do a timeout for now.
-window.setTimeout(() => {
-  console.log(window.__replicache);
-}, 1000);
+const REPLICACHE_OBJECT_PROPERTY_NAME = '__replicache';
+const DELAY_BETWEEN_ATTEMPTS_SECONDS = 1;
+const MAX_ATTEMPTS = 3;
+let attempts = 0;
+
+const installHook = () => {
+  attempts++;
+  if (attempts >= MAX_ATTEMPTS) {
+    console.log('Reached maximum number of attempts, bailing out.');
+  }
+  if (!!window[REPLICACHE_OBJECT_PROPERTY_NAME]) {
+    console.log('Replicache object is', window[REPLICACHE_OBJECT_PROPERTY_NAME]);
+  } else {
+    console.log('Replicache object not available yet, retrying in ' +
+        DELAY_BETWEEN_ATTEMPTS_SECONDS + ' second(s)...');
+    window.setTimeout(installHook, 1000 * DELAY_BETWEEN_ATTEMPTS_SECONDS);
+  }
+};
+
+installHook();
