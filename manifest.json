@@ -14,5 +14,16 @@
   ],
   "host_permissions": [
     "<all_urls>"
+  ],
+  "web_accessible_resources": [{
+      "resources": [
+        "panel.html",
+        "build/install_hook.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "extension_ids": []
+    }
   ]
 }

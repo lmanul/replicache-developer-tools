@@ -12,13 +12,15 @@ const initialize = async () => {
   if (!currentTab) {
     return;
   }
-  chrome.scripting.executeScript({
-    target: { tabId: currentTab.id },
-    args: [],
-    func: () => {
-      console.log('Loading replicache dev tools content script');
+
+  chrome.scripting.registerContentScripts([{
+      id: 'hook',
+      matches: ['<all_urls>'],
+      js: ['install_hook.js'],
+      runAt: 'document_idle',
+      world: chrome.scripting.ExecutionWorld.MAIN,
     },
-  });
+  ]);
 };
 
 initialize();
