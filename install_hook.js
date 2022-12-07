@@ -3,11 +3,12 @@ const DELAY_BETWEEN_ATTEMPTS_SECONDS = 1;
 const MAX_ATTEMPTS = 3;
 let attempts = 0;
 
-const installHook = () => {
-  attempts++;
+const installHook = (onChangeCallback) => {
   if (attempts >= MAX_ATTEMPTS) {
     console.log('Reached maximum number of attempts, bailing out.');
+    return;
   }
+  attempts++;
   if (!!window[REPLICACHE_OBJECT_PROPERTY_NAME]) {
     console.log('Replicache object is', window[REPLICACHE_OBJECT_PROPERTY_NAME]);
   } else {
