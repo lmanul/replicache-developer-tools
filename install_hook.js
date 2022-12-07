@@ -11,6 +11,10 @@ const installHook = (onChangeCallback) => {
   attempts++;
   if (!!window[REPLICACHE_OBJECT_PROPERTY_NAME]) {
     console.log('Replicache object is', window[REPLICACHE_OBJECT_PROPERTY_NAME]);
+    window[REPLICACHE_OBJECT_PROPERTY_NAME].experimentalWatch(evt => {
+      console.log('Update from Replicache. Posting message to', window);
+      window.postMessage(evt);
+    });
   } else {
     console.log('Replicache object not available yet, retrying in ' +
         DELAY_BETWEEN_ATTEMPTS_SECONDS + ' second(s)...');
@@ -19,3 +23,4 @@ const installHook = (onChangeCallback) => {
 };
 
 installHook();
+
