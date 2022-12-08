@@ -55,7 +55,7 @@ const initializePanel = async () => {
   }
   port = chrome.runtime.connect({ name: 'panel-bg' });
   port.onMessage.addListener((msg) => {
-    if (msg.event === 'sync-response') {
+    if (msg.event === 'data-sync') {
       if (!Array.isArray(msg.data)) {
         console.log('I do not know how to process this data');
         return;

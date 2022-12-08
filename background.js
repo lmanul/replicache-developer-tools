@@ -2,6 +2,9 @@ const CONTENT_SCRIPT_ID = 'replicache_devtools_hook';
 
 let panelPort, contentPort;
 
+// Keep data-sync messages sent from Replicache before the UI is ready.
+const messageBacklog = [];
+
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -18,18 +21,30 @@ chrome.runtime.onConnect.addListener(port => {
   console.log('Port name is', port.name);
   if (port.name === 'panel-bg') {
     panelPort = port;
+    // Any messages left for me?
+    for (const delayedMsg of messageBacklog) {
+      console.log('Sending delayed message', delayedMsg);
+      panelPort.postMessage({
+        'event': 'data-sync',
+        'data': delayedMsg.data
+      });
+    }
     port.onMessage.addListener(async (msg) => {
       console.log('Background: got message from panel', msg);
     });
   }
   if (port.name === 'bg-content') {
-    contentPort - port;
+    contentPort = port;
+    messageBacklog.length = 0;
     port.onMessage.addListener(async (msg) => {
       console.log('Background: got message from page', msg);
-      // If we are connected to the panel, forward that message.
-      if (!!panelPort) {
+      if (!panelPort) {
+        // If the panel isn't ready yet, keep the message for later.
+        console.log('No UI yet, storing message');
+        messageBacklog.push(msg);
+      } else {
         panelPort.postMessage({
-          'event': 'sync-response',
+          'event': 'data-sync',
           'data': msg.data,
         });
       }
