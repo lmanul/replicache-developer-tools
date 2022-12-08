@@ -1,5 +1,3 @@
-console.log('I am the ad-hoc content script');
-
 console.log('This is the content script. Window is', window);
 window.addEventListener("message", (event) => {
   // Only accept messages from our own window.
@@ -8,5 +6,5 @@ window.addEventListener("message", (event) => {
     return;
   }
 
-  console.log('Got message', event.data);
+  console.log('Content script: got message', event.data);
 });

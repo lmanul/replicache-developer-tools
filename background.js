@@ -14,7 +14,7 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
 
 chrome.runtime.onConnect.addListener(port => {
   port.onMessage.addListener(async (msg) => {
-    console.log('Got message', msg);
+    console.log('Background: got message', msg);
     if (msg.event === 'sync-request') {
       const tab = await getCurrentTab();
       chrome.scripting.executeScript({
