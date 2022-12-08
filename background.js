@@ -11,19 +11,11 @@ async function getCurrentTab() {
   return tab;
 }
 
-chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
-  if (changeInfo.status == 'complete' && tab.active) {
-    console.log('Tab updated');
-  }
-});
-
 chrome.runtime.onConnect.addListener(port => {
-  console.log('Port name is', port.name);
   if (port.name === 'panel-bg') {
     panelPort = port;
     // Any messages left for me?
     for (const delayedMsg of messageBacklog) {
-      console.log('Sending delayed message', delayedMsg);
       panelPort.postMessage({
         'event': 'data-sync',
         'data': delayedMsg.data
