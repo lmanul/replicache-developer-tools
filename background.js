@@ -12,7 +12,7 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete' && tab.active) {
     console.log('Tab updated');
   }
-})
+});
 
 chrome.runtime.onConnect.addListener(port => {
   console.log('Port name is', port.name);
@@ -20,22 +20,6 @@ chrome.runtime.onConnect.addListener(port => {
     panelPort = port;
     port.onMessage.addListener(async (msg) => {
       console.log('Background: got message from panel', msg);
-      // if (msg.event === 'sync-request') {
-        // const tab = await getCurrentTab();
-        // chrome.scripting.executeScript({
-          // target: {tabId: tab.id},
-          // func: () => {
-            // console.log('Executing script');
-            // return 1;
-          // }
-        // }, (scriptResult) => {
-          // console.log('Got result from script: ', scriptResult);
-          // port.postMessage({
-            // 'event': 'sync-response',
-            // 'data':  scriptResult[0].result
-          // });
-        // });
-      // }
     });
   }
   if (port.name === 'bg-content') {
