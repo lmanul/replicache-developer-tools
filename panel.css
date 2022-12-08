@@ -1,0 +1,37 @@
+body {
+  background-color: #eee;
+  font-family: Roboto;
+  margin: 0;
+  padding: 0;
+}
+
+#replicache-inspector {
+  padding: 1ex;
+}
+
+#replicache-inspector ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Entities */
+#replicache-inspector ul li {
+  background-color: white;
+  border: 1px solid #ddd;
+  display: block;
+  list-style: none;
+  margin: 1ex;
+  padding: 1ex;
+}
+
+/* Property list on an entity */
+#replicache-inspector ul li ul {
+  margin-top: 0.5ex;
+}
+
+/* Properties within an entity */
+#replicache-inspector ul li ul li {
+  border: none;
+  margin: 0;
+  padding: 0 0 0 2ex;
+}
