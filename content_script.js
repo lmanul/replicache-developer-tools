@@ -1,4 +1,5 @@
-console.log('This is the content script. Window is', window);
+const port = chrome.runtime.connect({ name: 'bg-content' });
+
 window.addEventListener("message", (event) => {
   // Only accept messages from our own window.
   if (event.source !== this) {
@@ -7,4 +8,8 @@ window.addEventListener("message", (event) => {
   }
 
   console.log('Content script: got message', event.data);
+  port.postMessage({
+    'event': 'sync-response',
+    'data': event.data
+  });
 });

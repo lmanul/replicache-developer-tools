@@ -1,5 +1,7 @@
 const CONTENT_SCRIPT_ID = 'replicache_devtools_hook';
 
+let panelPort, contentPort;
+
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -13,25 +15,42 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
 })
 
 chrome.runtime.onConnect.addListener(port => {
-  port.onMessage.addListener(async (msg) => {
-    console.log('Background: got message', msg);
-    if (msg.event === 'sync-request') {
-      const tab = await getCurrentTab();
-      chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        func: () => {
-          console.log('Executing script');
-          return 1;
-        }
-      }, (scriptResult) => {
-        console.log('Got result from script: ', scriptResult);
-        port.postMessage({
+  console.log('Port name is', port.name);
+  if (port.name === 'panel-bg') {
+    panelPort = port;
+    port.onMessage.addListener(async (msg) => {
+      console.log('Background: got message from panel', msg);
+      // if (msg.event === 'sync-request') {
+        // const tab = await getCurrentTab();
+        // chrome.scripting.executeScript({
+          // target: {tabId: tab.id},
+          // func: () => {
+            // console.log('Executing script');
+            // return 1;
+          // }
+        // }, (scriptResult) => {
+          // console.log('Got result from script: ', scriptResult);
+          // port.postMessage({
+            // 'event': 'sync-response',
+            // 'data':  scriptResult[0].result
+          // });
+        // });
+      // }
+    });
+  }
+  if (port.name === 'bg-content') {
+    contentPort - port;
+    port.onMessage.addListener(async (msg) => {
+      console.log('Background: got message from page', msg);
+      // If we are connected to the panel, forward that message.
+      if (!!panelPort) {
+        panelPort.postMessage({
           'event': 'sync-response',
-          'data':  scriptResult[0].result
+          'data': msg.data,
         });
-      });
-    }
-  });
+      }
+    });
+  }
 });
 
 const initialize = async () => {
