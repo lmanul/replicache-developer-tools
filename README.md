@@ -17,5 +17,5 @@ the architecture here is a little tricky.
 | `content_script.js` | Host page | Extension framework | Yes | Catch messages about changes in the data |
 | `background.js` | Service worker in host page | Extension framework | Yes | TODO |
 | `devtools.js` | Developer tools | From dev tools HTML | Yes | Add the Replicache panel |
-| `install_hook.js` | Host page | From `background.js` | No | Listen to changes from Replicache |
+| `install_hook.js` | Host page "main world" | From `background.js` | No | Listen to changes from Replicache |
 | `panel.js` | Panel | From panel HTML | No | Coordinate between panel UI and data messages |
