@@ -45,7 +45,6 @@ const render = () => {
 }
 
 const initializePanel = async () => {
-  console.log('Initializing...');
   const testButton = document.getElementById('test-message');
   if (!!testButton) {
     testButton.addEventListener('click', testMessage);
@@ -56,7 +55,6 @@ const initializePanel = async () => {
   }
   port = chrome.runtime.connect({ name: 'panel-bg' });
   port.onMessage.addListener((msg) => {
-    console.log('Panel: got message', msg);
     if (msg.event === 'sync-response') {
       if (!Array.isArray(msg.data)) {
         console.log('I do not know how to process this data');
@@ -77,21 +75,8 @@ const initializePanel = async () => {
       render();
     }
   });
-  // Initial sync
-  sync(null);
-};
-
-const sync = (evt) => {
-  port.postMessage({
-    'event': 'sync-request'
-  });
-};
-
-const testMessage = (evt) => {
-  port.postMessage({
-    'event': 'test',
-    'data': {'hello': 'world'},
-  });
+  // Initial render
+  render();
 };
 
 initializePanel();

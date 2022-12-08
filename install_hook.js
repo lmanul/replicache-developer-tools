@@ -13,7 +13,7 @@ const installHook = (onChangeCallback) => {
     console.log('Replicache object is', window[REPLICACHE_OBJECT_PROPERTY_NAME]);
     window[REPLICACHE_OBJECT_PROPERTY_NAME].experimentalWatch(evt => {
       window.postMessage(evt);
-    });
+    }, {initialValuesInFirstDiff: true});
   } else {
     console.log('Replicache object not available yet, retrying in ' +
         DELAY_BETWEEN_ATTEMPTS_SECONDS + ' second(s)...');
