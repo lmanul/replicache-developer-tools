@@ -13,6 +13,10 @@ const processAddOperation = (operation) => {
   dataStore[operation.key] = operation.newValue;
 };
 
+const processDeleteOperation = (operation) => {
+  delete dataStore[operation.key];
+};
+
 const renderSingleEntity = (key, entity) => {
   let rendered = '';
   rendered += '<li>';
@@ -65,6 +69,9 @@ const initializePanel = async () => {
         }
         if (operation.op === 'add') {
           processAddOperation(operation);
+        }
+        if (operation.op === 'del') {
+          processDeleteOperation(operation);
         }
       }
       render();
