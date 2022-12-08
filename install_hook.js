@@ -12,7 +12,6 @@ const installHook = (onChangeCallback) => {
   if (!!window[REPLICACHE_OBJECT_PROPERTY_NAME]) {
     console.log('Replicache object is', window[REPLICACHE_OBJECT_PROPERTY_NAME]);
     window[REPLICACHE_OBJECT_PROPERTY_NAME].experimentalWatch(evt => {
-      console.log('Update from Replicache. Posting message to', window);
       window.postMessage(evt);
     });
   } else {
