@@ -5,10 +5,12 @@ let port;
 let dataStore = {};
 
 const processChangeOperation = (operation) => {
-  console.log('Change op', operation);
   // We might want to also use the old value in some way in the UI
   dataStore[operation.key] = operation.newValue;
-  console.log(dataStore);
+};
+
+const processAddOperation = (operation) => {
+  dataStore[operation.key] = operation.newValue;
 };
 
 const renderSingleEntity = (key, entity) => {
@@ -60,6 +62,9 @@ const initializePanel = async () => {
         console.log('Operation: ', operation);
         if (operation.op === 'change') {
           processChangeOperation(operation);
+        }
+        if (operation.op === 'add') {
+          processAddOperation(operation);
         }
       }
       render();
